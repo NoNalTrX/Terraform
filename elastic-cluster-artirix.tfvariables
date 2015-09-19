@@ -1,0 +1,13 @@
+
+environment_name = "artirix-test"
+
+provider.access_key = "*************************"
+provider.secret_key = "************************************"
+provider.region = "eu-west-1"
+
+elastic.availability_zone    = "eu-west-1a"
+elastic.node-count	     = 3
+
+zone.0 = "eu-west-1a"
+zone.1 = "eu-west-1b"
+zone.2 = "eu-west-1c"
