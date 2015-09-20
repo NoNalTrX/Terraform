@@ -1,10 +1,13 @@
 resource "aws_instance" "elastic" {
     ami                         = "${var.elastic.ami_image}"
-    availability_zone           = "${lookup(var.zone, count.index)}"
+    key_name                    = "${var.key.key_name}"
+    availability_zone           = "${element(split(",", var.zones), count.index)}"
     instance_type               = "${var.elastic.instance_type}"
-    associate_public_ip_address = true
+    associate_public_ip_address = false
     source_dest_check           = false
-    count			= "${var.elastic.node-count}"
+    security_groups             = ["${aws_security_group.nodes.id}"]
+    subnet_id                   = "${element(aws_subnet.private-subnet.*.id, count.index)}"
+    count                       = "${var.elastic.node-count}"
 
     tags {
         Name        = "${var.environment_name}-elastic-node-${count.index}"

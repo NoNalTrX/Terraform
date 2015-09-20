@@ -1,13 +1,25 @@
 
 environment_name = "artirix-test"
 
-provider.access_key = "*************************"
-provider.secret_key = "************************************"
+provider.access_key = "***********************"
+provider.secret_key = "*************************************"
 provider.region = "eu-west-1"
 
-elastic.availability_zone    = "eu-west-1a"
-elastic.node-count	     = 3
+key.key_name = "aguerin @ Local VM"
+key.public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjSPM0mPkTZOmNN9b7Twq5RurGRCNdne4EIRJTyYY0oHhSu6Bzq+rggXiv6QesUB2SmltvvyEA59lnNl7W6ZLTSm8OQ3f4lIrL2ZjdGZ9ShCV1gXDvs1n9WjLdOqaFSuhxTO9je4wwyyxiW+ViGGdULb58+Jik8KMV1FnWvjH6R21I6R0EonGRdXtiVFW7lgA4xrB/4p9SJhzad8DGhfrtrhkKcWjWybGjpUw9BqfQN56gElbJJ3xCzDXjC9pdg+oQsezMyEohqBXl1qCulBEw+Vyp8Jxiaa4IjolRuynM0eAljg6Ok2gNb9FOi2JSQXVBtLbL2rOlyy9rTjewETdL aguerin@localvm"
 
-zone.0 = "eu-west-1a"
-zone.1 = "eu-west-1b"
-zone.2 = "eu-west-1c"
+vpc.owner_id   = "621942167585"
+vpc.cidr_block = "10.30.0.0/16"
+
+ipList.ssh = "5.135.180.21/32,82.242.163.207/32"
+
+elastic.node-count	     = 3
+elastic.ami_image	     = "ami-47a23a30"
+
+
+
+lb.instance_port	= 9200
+lb.instance_protocol	= "HTTP"
+lb.lb_port		= 9200
+lb.lb_protocol		= "HTTP"
+
