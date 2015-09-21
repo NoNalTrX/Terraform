@@ -10,8 +10,8 @@ environment_name = "artirix-test"
 #####                   PROVIVIDER INFORMATIONS                   #####
 #######################################################################
 
-provider.access_key = "***********************"
-provider.secret_key = "*********************************"
+provider.access_key = "*************************"
+provider.secret_key = "***************************************"
 provider.region = "eu-west-1"
 
 #######################################################################
@@ -28,7 +28,8 @@ elastic.instance_type   = "t2.micro" #The free one
 elastic.associate_public_ip_address = "true"
 
 #Setting the AMI for all instances
-elastic.ami_image       = "ami-47a23a30" #Ubuntu 14.10
+#elastic.ami_image       = "ami-47a23a30" #Ubuntu 14.10
+elastic.ami_image       = "ami-f2b2e185" #ElasticSearch on Ubuntu 14.10
 
 #Declaration of 3 news subnets, here I decided to create each node in a different zone, they all need their subnet
 subnet.count            = 3
@@ -131,8 +132,21 @@ lb_egress_to.0 = "9200"
 lb_egress_protocol.0 = "tcp"
 lb_egress_cidr_block.0 = "0.0.0.0/0"
 
-lb.instance_port	= 9200
-lb.instance_protocol	= "HTTP"
-lb.lb_port		= 9200
-lb.lb_protocol		= "HTTP"
+#######################################################################
+#####           LOAD BALANCER LISTENER CONFIGURATION              #####
+#######################################################################
 
+lb.instance_port        = 9200
+lb.instance_protocol    = "http"
+lb.lb_port              = 9200
+lb.lb_protocol	        = "http"
+
+#######################################################################
+#####         LOAD BALANCER HEALTH CHECK CONFIGURATION            #####
+#######################################################################
+
+lb.hc_healthy_threshold   = 2
+lb.hc_unhealthy_threshold = 2
+lb.hc_timeout             = 3
+lb.hc_target              = "http:9200/"
+lb.hc_interval            = 30

@@ -4,16 +4,16 @@ resource "aws_elb" "lb" {
     listener {
         instance_port       = "${var.lb.instance_port}"
         instance_protocol   = "${var.lb.instance_protocol}"
-        lb_port             = "${var.lb.lb_port}"
-        lb_protocol         = "${var.lb.lb_protocol}"
+        lb_port             = "${var.lb.port}"
+        lb_protocol         = "${var.lb.protocol}"
     }
 
     health_check {
-        healthy_threshold   = 2
-        unhealthy_threshold = 2
-        timeout             = 3
-        target              = "HTTP:9200/"
-        interval            = 30
+        healthy_threshold   = "${var.lb.hc_healthy_threshold}"
+        unhealthy_threshold = "${var.lb.hc_unhealthy_threshold}"
+        timeout             = "${var.lb.hc_timeout}"
+        target              = "${var.lb.hc_target}"
+        interval            = "${var.lb.hc_interval}"
     }
 
     instances                   = ["${aws_instance.elastic.*.id}"]
