@@ -1,22 +1,135 @@
 
+#######################################################################
+#####                   GENERAL CONFIGURATION                     #####
+#######################################################################
+
+#Declaration of the environment name
 environment_name = "artirix-test"
 
+#######################################################################
+#####                   PROVIVIDER INFORMATIONS                   #####
+#######################################################################
+
 provider.access_key = "***********************"
-provider.secret_key = "*************************************"
+provider.secret_key = "*********************************"
 provider.region = "eu-west-1"
 
-key.key_name = "aguerin @ Local VM"
-key.public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjSPM0mPkTZOmNN9b7Twq5RurGRCNdne4EIRJTyYY0oHhSu6Bzq+rggXiv6QesUB2SmltvvyEA59lnNl7W6ZLTSm8OQ3f4lIrL2ZjdGZ9ShCV1gXDvs1n9WjLdOqaFSuhxTO9je4wwyyxiW+ViGGdULb58+Jik8KMV1FnWvjH6R21I6R0EonGRdXtiVFW7lgA4xrB/4p9SJhzad8DGhfrtrhkKcWjWybGjpUw9BqfQN56gElbJJ3xCzDXjC9pdg+oQsezMyEohqBXl1qCulBEw+Vyp8Jxiaa4IjolRuynM0eAljg6Ok2gNb9FOi2JSQXVBtLbL2rOlyy9rTjewETdL aguerin@localvm"
+#######################################################################
+#####           INSTANCES AND SUBNETS CONFIGURATION               #####
+#######################################################################
 
-vpc.owner_id   = "621942167585"
-vpc.cidr_block = "10.30.0.0/16"
+#Declaration of 3 instances for 3 ES node"
+elastic.node-count      = 3
 
-ipList.ssh = "5.135.180.21/32,82.242.163.207/32"
+#Declaration of the elastic instance type
+elastic.instance_type   = "t2.micro" #The free one
 
-elastic.node-count	     = 3
-elastic.ami_image	     = "ami-47a23a30"
+#Do we give a public IP to the ES instances
+elastic.associate_public_ip_address = "true"
 
+#Setting the AMI for all instances
+elastic.ami_image       = "ami-47a23a30" #Ubuntu 14.10
 
+#Declaration of 3 news subnets, here I decided to create each node in a different zone, they all need their subnet
+subnet.count            = 3
+
+# Key used to give access to the 3 nodes
+key.key_name = "aguerin @ Local VM"  # Key name
+key.public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjSPM0mPkTZOmNN9b7Twq5RurGRCNdne4EIRJTyYY0oHhSu6Bzq+rggXiv6QesUB2SmltvvyEA59lnNl7W6ZLTSm8OQ3f4lIrL2ZjdGZ9ShCV1gXDvs1n9WjLdOqaFSuhxTO9je4wwyyxiW+ViGGdULb58+Jik8KMV1FnWvjH6R21I6R0EonGRdXtiVFW7lgA4xrB/4p9SJhzad8DGhfrtrhkKcWjWybGjpUw9BqfQN56gElbJJ3xCzDXjC9pdg+oQsezMyEohqBXl1qCulBEw+Vyp8Jxiaa4IjolRuynM0eAljg6Ok2gNb9FOi2JSQXVBtLbL2rOlyy9rTjewETdL aguerin@localvm" # Key value
+
+#######################################################################
+#####                VPC AND NETWORK CONFIGURATION                #####
+#######################################################################
+
+# New VPC informations 
+vpc.owner_id   = "621942167585" # My ID
+vpc.cidr_block = "10.30.0.0/16" # CIDR block for the new VPC
+
+# Availability zone declaration, indexes of the zone (0,1,2) match the instance number. Each instance will be in a different zone (QOS) 
+zones.0 = "eu-west-1a"
+zones.1 = "eu-west-1b"
+zones.2 = "eu-west-1c"
+
+#CIDR block for the 3 news subnets, indexes of the cidr_block (0,1,2) match the instance/subnet number. Each instance will be in a differente subnet 
+cidr_blocks.0 = "10.30.16.0/20"
+cidr_blocks.1 = "10.30.32.0/20"
+cidr_blocks.2 = "10.30.0.0/20"
+
+#######################################################################
+#####        INPUT SECURITY RULES DEFINITION FOR ES NODES         #####
+#######################################################################
+
+#Number of input rule to create them dynamicaly
+nodes_ingress_rule_count = 3
+
+#Rule number 1 allow all vpc on port 9300
+nodes_ingress_from.0 = "9300"
+nodes_ingress_to.0 = "9300"
+nodes_ingress_protocol.0 = "tcp"
+nodes_ingress_cidr_block.0 = "10.30.0.0/16"
+
+#Rule number 2 allow all vpc on port 9200
+nodes_ingress_from.1 = "9200"
+nodes_ingress_to.1 = "9200"
+nodes_ingress_protocol.1 = "tcp"
+nodes_ingress_cidr_block.1 = "10.30.0.0/16"
+
+#Rule number 3 allow all vpc on port 22
+nodes_ingress_from.2 = "22"
+nodes_ingress_to.2 = "22"
+nodes_ingress_protocol.2 = "tcp"
+nodes_ingress_cidr_block.2 = "5.135.180.21/32,82.242.163.207/32,10.30.0.0/16"
+
+#######################################################################
+#####        OUTPUT SECURITY RULES DEFINITION FOR ES NODES        #####
+#######################################################################
+
+#Number of output rule to create them dynamicaly
+nodes_egress_rule_count = 3
+
+#Rule number 1 allow all vpc on port 9300
+nodes_egress_from.0 = "9300"
+nodes_egress_to.0 = "9300"
+nodes_egress_protocol.0 = "tcp"
+nodes_egress_cidr_block.0 = "10.30.0.0/16"
+
+#Rule number 2 allow all vpc on port 9200
+nodes_egress_from.1 = "9200"
+nodes_egress_to.1 = "9200"
+nodes_egress_protocol.1 = "tcp"
+nodes_egress_cidr_block.1 = "10.30.0.0/16"
+
+#Rule number 3 allow all vpc on port 22
+nodes_egress_from.2 = "22"
+nodes_egress_to.2 = "22"
+nodes_egress_protocol.2 = "tcp"
+nodes_egress_cidr_block.2 = "5.135.180.21/32,82.242.163.207/32,10.30.0.0/16"
+
+#######################################################################
+#####     INPUT SECURITY RULES DEFINITION FOR LOAD BALANCER       #####
+#######################################################################
+
+#Number of input rule to create them dynamicaly
+lb_ingress_rule_count = 1
+
+#Rule number 1 allow anywhere on port 9200
+lb_ingress_from.0 = "9200"
+lb_ingress_to.0 = "9200"
+lb_ingress_protocol.0 = "tcp"
+lb_ingress_cidr_block.0 = "0.0.0.0/0"
+
+#######################################################################
+#####     OUTPUT SECURITY RULES DEFINITION FOR LOAD BALANCER      #####
+#######################################################################
+
+#Number of output rule to create them dynamicaly
+lb_egress_rule_count = 1
+
+#Rule number 1 allow anywhere on port 9200
+lb_egress_from.0 = "9200"
+lb_egress_to.0 = "9200"
+lb_egress_protocol.0 = "tcp"
+lb_egress_cidr_block.0 = "0.0.0.0/0"
 
 lb.instance_port	= 9200
 lb.instance_protocol	= "HTTP"
