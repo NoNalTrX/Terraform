@@ -10,8 +10,8 @@ environment_name = "artirix-test"
 #####                   PROVIVIDER INFORMATIONS                   #####
 #######################################################################
 
-provider.access_key = "***********************" #add your key
-provider.secret_key = "**********************************" #add your key
+provider.access_key = "***********************"
+provider.secret_key = "******************************************"
 provider.region = "eu-west-1"
 
 #######################################################################
@@ -22,13 +22,14 @@ provider.region = "eu-west-1"
 elastic.node-count      = 3
 
 #Declaration of the elastic instance type
-elastic.instance_type   = "t2.micro" #The free one
+elastic.instance_type   = "t2.micro" 
 
 #Do we give a public IP to the ES instances
 elastic.associate_public_ip_address = "true"
 
 #Setting the AMI for all instances
 elastic.ami_image       = "ami-47a23a30" #Ubuntu 14.04
+
 
 #######################################################################
 #####            EASY WAY... USE ELASTICSEARCH AMI                #####
