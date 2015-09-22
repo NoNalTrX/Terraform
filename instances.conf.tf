@@ -51,7 +51,6 @@ resource "aws_instance" "elastic" {
                   "sudo sed -i 's/\*\*access_key\*\*/${var.provider.access_key}/g' /tmp/elasticsearch.yml",
                   "sudo sed -i 's|\*\*secret_key\*\*|${var.provider.secret_key}|g' /tmp/elasticsearch.yml",
                   "sudo sed -i 's/\*\*security_group_id\*\*/${aws_security_group.nodes.id}/g' /tmp/elasticsearch.yml",
-                  #"sudo sed -i 's/\*\*cluster_zone\*\*/${var.zones}/g' /tmp/elasticsearch.yml",
                   "sudo sed -i 's/\*\*cluster_region\*\*/${var.provider.region}/g' /tmp/elasticsearch.yml",
                   "sudo cp /tmp/elasticsearch.yml /etc/elasticsearch/elasticsearch.yml",
                   "sudo service elasticsearch restart"
