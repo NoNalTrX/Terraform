@@ -10,8 +10,8 @@ environment_name = "artirix-test"
 #####                   PROVIVIDER INFORMATIONS                   #####
 #######################################################################
 
-provider.access_key = "*************************"
-provider.secret_key = "***************************************"
+provider.access_key = "***********************" #add your key
+provider.secret_key = "**********************************" #add your key
 provider.region = "eu-west-1"
 
 #######################################################################
@@ -28,8 +28,13 @@ elastic.instance_type   = "t2.micro" #The free one
 elastic.associate_public_ip_address = "true"
 
 #Setting the AMI for all instances
-#elastic.ami_image       = "ami-47a23a30" #Ubuntu 14.10
-elastic.ami_image       = "ami-f2b2e185" #ElasticSearch on Ubuntu 14.10
+elastic.ami_image       = "ami-47a23a30" #Ubuntu 14.04
+
+#######################################################################
+#####            EASY WAY... USE ELASTICSEARCH AMI                #####
+#######################################################################
+
+#elastic.ami_image       = "ami-f2b2e185" #ElasticSearch on Ubuntu 14.04
 
 #Declaration of 3 news subnets, here I decided to create each node in a different zone, they all need their subnet
 subnet.count            = 3
@@ -37,6 +42,7 @@ subnet.count            = 3
 # Key used to give access to the 3 nodes
 key.key_name = "aguerin @ Local VM"  # Key name
 key.public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCjSPM0mPkTZOmNN9b7Twq5RurGRCNdne4EIRJTyYY0oHhSu6Bzq+rggXiv6QesUB2SmltvvyEA59lnNl7W6ZLTSm8OQ3f4lIrL2ZjdGZ9ShCV1gXDvs1n9WjLdOqaFSuhxTO9je4wwyyxiW+ViGGdULb58+Jik8KMV1FnWvjH6R21I6R0EonGRdXtiVFW7lgA4xrB/4p9SJhzad8DGhfrtrhkKcWjWybGjpUw9BqfQN56gElbJJ3xCzDXjC9pdg+oQsezMyEohqBXl1qCulBEw+Vyp8Jxiaa4IjolRuynM0eAljg6Ok2gNb9FOi2JSQXVBtLbL2rOlyy9rTjewETdL aguerin@localvm" # Key value
+key.provisioner_key_path = "~/.ssh/id_rsa"
 
 #######################################################################
 #####                VPC AND NETWORK CONFIGURATION                #####
@@ -61,7 +67,7 @@ cidr_blocks.2 = "10.30.0.0/20"
 #######################################################################
 
 #Number of input rule to create them dynamicaly
-nodes_ingress_rule_count = 3
+nodes_ingress_rule_count = 4
 
 #Rule number 1 allow all vpc on port 9300
 nodes_ingress_from.0 = "9300"
@@ -81,30 +87,24 @@ nodes_ingress_to.2 = "22"
 nodes_ingress_protocol.2 = "tcp"
 nodes_ingress_cidr_block.2 = "5.135.180.21/32,82.242.163.207/32,10.30.0.0/16"
 
+#Rule number 3 allow all vpc on port 5438 (multicast ES)
+nodes_ingress_from.3 = "54328"
+nodes_ingress_to.3 = "54328"
+nodes_ingress_protocol.3 = "tcp"
+nodes_ingress_cidr_block.3 = "10.30.0.0/16"
+
 #######################################################################
 #####        OUTPUT SECURITY RULES DEFINITION FOR ES NODES        #####
 #######################################################################
 
 #Number of output rule to create them dynamicaly
-nodes_egress_rule_count = 3
+nodes_egress_rule_count = 1
 
 #Rule number 1 allow all vpc on port 9300
-nodes_egress_from.0 = "9300"
-nodes_egress_to.0 = "9300"
-nodes_egress_protocol.0 = "tcp"
-nodes_egress_cidr_block.0 = "10.30.0.0/16"
-
-#Rule number 2 allow all vpc on port 9200
-nodes_egress_from.1 = "9200"
-nodes_egress_to.1 = "9200"
-nodes_egress_protocol.1 = "tcp"
-nodes_egress_cidr_block.1 = "10.30.0.0/16"
-
-#Rule number 3 allow all vpc on port 22
-nodes_egress_from.2 = "22"
-nodes_egress_to.2 = "22"
-nodes_egress_protocol.2 = "tcp"
-nodes_egress_cidr_block.2 = "5.135.180.21/32,82.242.163.207/32,10.30.0.0/16"
+nodes_egress_from.0 = "0"
+nodes_egress_to.0 = "0"
+nodes_egress_protocol.0 = "-1"
+nodes_egress_cidr_block.0 = "0.0.0.0/0"
 
 #######################################################################
 #####     INPUT SECURITY RULES DEFINITION FOR LOAD BALANCER       #####
@@ -136,10 +136,10 @@ lb_egress_cidr_block.0 = "0.0.0.0/0"
 #####           LOAD BALANCER LISTENER CONFIGURATION              #####
 #######################################################################
 
-lb.instance_port        = 9200
+lb.instance_port        = "9200"
 lb.instance_protocol    = "http"
-lb.lb_port              = 9200
-lb.lb_protocol	        = "http"
+lb.port              = "9200"
+lb.protocol	        = "http"
 
 #######################################################################
 #####         LOAD BALANCER HEALTH CHECK CONFIGURATION            #####

@@ -29,7 +29,7 @@ resource "aws_security_group_rule" "ingress_nodes_rules" {
     from_port = "${lookup(var.nodes_ingress_from,count.index)}"
     to_port = "${lookup(var.nodes_ingress_to,count.index)}"
     protocol = "${lookup(var.nodes_ingress_protocol,count.index)}"
-    cidr_blocks = ["${split(",",lookup(var.nodes_egress_cidr_block,count.index))}"]
+    cidr_blocks = ["${split(",",lookup(var.nodes_ingress_cidr_block,count.index))}"]
     count = "${var.nodes_ingress_rule_count}"
 
     security_group_id = "${aws_security_group.nodes.id}"
@@ -51,7 +51,7 @@ resource "aws_security_group_rule" "ingress_load_balancer_rules" {
     from_port = "${lookup(var.lb_ingress_from,count.index)}"
     to_port = "${lookup(var.lb_ingress_to,count.index)}"
     protocol = "${lookup(var.lb_ingress_protocol,count.index)}"
-    cidr_blocks = ["${split(",",lookup(var.lb_egress_cidr_block,count.index))}"]
+    cidr_blocks = ["${split(",",lookup(var.lb_ingress_cidr_block,count.index))}"]
     count = "${var.lb_ingress_rule_count}"
 
     security_group_id = "${aws_security_group.lb.id}"

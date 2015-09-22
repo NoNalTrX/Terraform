@@ -1,0 +1,49 @@
+################################### Cluster ###################################
+
+cluster.name: **cluster_name**
+
+#################################### Node #####################################
+
+node.name: **node_name**
+node.master: true
+node.data: false
+node.max_local_storage_nodes: 1
+
+#################################### Index ####################################
+
+index.mapper.dynamic: true
+action.auto_create_index: true
+action.disable_delete_all_indices: true
+
+#################################### Paths ####################################
+
+path.conf: /etc/elasticsearch
+path.data: /var/lib/elasticsearch
+path.logs: /var/log/elasticsearch
+
+
+############################## Network And HTTP ###############################
+
+http.port: **es_port**
+http.enabled: true
+
+################################## Discovery ##################################
+
+cloud.node.auto_attributes: true
+
+discovery.zen.minimum_master_nodes: 1
+discovery.zen.ping.multicast.enabled: false
+
+cloud.aws.access_key: "**access_key**"
+cloud.aws.secret_key: "**secret_key**"
+
+plugin.mandatory: "cloud-aws"
+
+discovery.type: "ec2"
+discovery.any_group: true
+discovery.ec2.groups: "**security_group_id**"
+discovery.ec2.host_type: "private_ip"
+discovery.ec2.ping_timeout: "30s"
+cloud.aws.region: "**cluster_region**"
+
+
